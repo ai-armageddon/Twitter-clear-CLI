@@ -4,13 +4,21 @@ import sys
 
 # env based import
 from dev import *
-env = get_creds(msg=False)
+
+env = get_creds(msg=False) # env & msg are eavailable as option parameters
+
 if env == 'development':
     from temp_creds import *
 elif env == 'production':
     from creds import *
-
-# print(get_creds())
+else:
+    print('''
+        ** No enviroment API creds founds. **
+        Enter Twitter API creds in creds.py for production
+        OR
+        temp_creds.py for dev env
+        ''')
+    sys.exit()
 
 # auth
 auth = tp.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -36,7 +44,7 @@ def cleanfvs():
         favs = api.favorites(screenName)
         for like in favs:
             api.destroy_favorite(like.id)
-            print('Fav ID: ', like.id)
+            print('Deleting fav: ', like.id)
     print('All favs removed.')
         
 # clean all
